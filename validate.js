@@ -5,16 +5,16 @@ export default class Validate {
         this.handler = handler;
     }
     async validateMsg(msg) {
-        if (this.isReportCmd(msg)) await this.handler.reportMsg(msg);
-        else if (this.isGetReportsCmd(msg)) await this.handler.getReportsMsg(msg);
+        if (this.isGetReportsCmd(msg)) await this.handler.getReportsMsg(msg);
         else if (this.isClearCmd(msg)) await this.handler.clearMsg(msg);
-
+        else if (this.isReportCmd(msg)) await this.handler.reportMsg(msg);
     }
 
 
     isReportCmd(msg) {
         let { text } = msg;
-        if (text.includes('#report')) {
+
+        if (text.includes("#report")) {
             return true;
         } else {
             return false;
