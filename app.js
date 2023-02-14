@@ -8,6 +8,4 @@ let validate = new Validate(handler);
 
 bot.on('message', (msg) => {
     validate.validateMsg(msg, bot)
-    console.log(msg);
-
 })
