@@ -6,8 +6,10 @@ export default class Handler {
     constructor(bot) {
         this.bot = bot;
     }
+
     async reportMsg(msg) {
-        let { from: { id, first_name }, text } = msg;
+
+        let { from: { first_name }, text } = msg;
         text = text.substring(8)
 
         let userData = await fs.readFile('./reports.json', { encoding: 'utf8' });
@@ -17,27 +19,28 @@ export default class Handler {
 
         converted = JSON.stringify(converted, null, 2);
         await fs.writeFile('./reports.json', converted);
+
     }
+
     async getReportsMsg(msg) {
 
         let { chat: { id } } = msg
 
-        if (id == 450797571 || id == 1222751218) {
-            let userData = await fs.readFile('./reports.json', { encoding: 'utf8' });
-            let converted = await JSON.parse(userData);
-            for (let key in converted) {
-                await this.bot.sendMessage(id, `${converted[key].name} \n ${converted[key].report}`)
-            }
+        let userData = await fs.readFile('./reports.json', { encoding: 'utf8' });
+        let converted = await JSON.parse(userData);
+
+        for (let key in converted) {
+            await this.bot.sendMessage(id, `${converted[key].name}\n${converted[key].report}`)
         }
     }
+
     async clearMsg(msg) {
         let { chat: { id } } = msg
-        if (id == 450797571 || id == 1222751218) {
-            let userData = await fs.readFile('./reports.json', { encoding: 'utf8' });
-            userData = "[]";
-            await fs.writeFile('./reports.json', userData);
+        let userData = await fs.readFile('./reports.json', { encoding: 'utf8' });
 
-        }
-        this.bot.sendMessage(id, 'Файл репортов был очищен')
+        userData = "[]";
+        await fs.writeFile('./reports.json', userData);
+
+        this.bot.sendMessage(id, 'Файл отчетов был очищен')
     }
 }
