@@ -8,6 +8,7 @@ export default class Validate {
         if (this.isGetReportsCmd(msg)) await this.handler.getReportsMsg(msg);
         else if (this.isClearCmd(msg)) await this.handler.clearMsg(msg);
         else if (this.isReportCmd(msg)) await this.handler.reportMsg(msg);
+        else if (this.isInitCmd(msg)) await this.handler.initCmd(msg);
     }
 
 
@@ -32,6 +33,14 @@ export default class Validate {
     isClearCmd(msg) {
         let { from: { id }, text } = msg;
         if (text === '/clear' && (id == 450797571 || id == 1222751218)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    isInitCmd(msg) {
+        let { from: { id }, text } = msg;
+        if (text === '/practicumInit') {
             return true;
         } else {
             return false;

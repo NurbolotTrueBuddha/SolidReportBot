@@ -17,8 +17,7 @@ export default class Handler {
 
         converted.push({ name: first_name, report: text });
 
-        converted = JSON.stringify(converted, null, 2);
-        await fs.writeFile('./reports.json', converted);
+        await fs.writeFile('./reports.json', JSON.stringify(converted, null, 2));
 
     }
 
@@ -42,5 +41,37 @@ export default class Handler {
         await fs.writeFile('./reports.json', userData);
 
         this.bot.sendMessage(id, 'Файл отчетов был очищен')
+    }
+
+    async initCmd(msg) {
+        let { from: { first_name, id } } = msg;
+
+
+        let studentData = await fs.readFile('./students.json', { encoding: 'utf8' });
+        let convertedStudnet = await JSON.parse(studentData);
+        let flag = true;
+        for (let i in convertedStudnet) {
+            if (convertedStudnet[i].id !== id) {
+
+                convertedStudnet.push({ name: first_name, id: id, status: 0 })
+                await fs.writeFile('./students.json', JSON.stringify(convertedStudnet, null, 2));
+
+                flag = false;
+                break;
+            }
+        }
+
+        if (!flag) {
+
+            this.bot.sendMessage(msg.chat.id, `Вы уже проинициализированы`);
+
+        } else {
+
+
+            await this.bot.sendMessage(msg.chat.id, `${first_name} 👍`);
+        }
+
+
+
     }
 }
